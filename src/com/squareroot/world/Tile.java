@@ -19,12 +19,10 @@ public class Tile {
 
 	}
 	public void render(Graphics g) {
-		g.drawImage(sprite, x - Camera.x, y - Camera.y, null);
+		g.drawImage(sprite, x, y, null);
 
 	}
 	public void tick() {
-		this.x -= Camera.x;
-		this.y -= Camera.y;
 
 	}
 }

@@ -6,8 +6,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.squareroot.entities.Bullet;
 import com.squareroot.entities.Enemy;
 import com.squareroot.entities.Entity;
+import com.squareroot.entities.Health;
 import com.squareroot.entities.Weapon;
 import com.squareroot.main.Game;
 
@@ -26,28 +28,27 @@ public class World {
 			int c = 0;
 			for (int p : pixels) {
 				int i, j;
-				j = c % 20;
-				i = (int) c / 20;
+				j = (int) c / 20;;
+				i = c % 20;
 
-				tiles[i][j] = new TileFloor(i * 16, j * 16, Tile.TILE_FLOOR);
-
+				tiles[i][j] = new TileFloor(i << 4, j << 4, Tile.TILE_FLOOR);
 				if (p == 0xFFFF0C00) {
 					Game.entities.add(
-							new Enemy(i * 6, j * 16, 16, 16, Entity.ENEMY));
+							new Enemy(i << 4, j << 4, 16, 16, Entity.ENEMY));
 				} else if (p == 0xFFE5FF00) {
-					Game.entities.add(new Weapon(i * 16, j * 16, 16, 16,
+					Game.entities.add(new Health(i << 4, j << 4, 16, 16,
 							Entity.LIFE_PACK));
 				} else if (p == 0xFFB200FF) {
 					Game.entities.add(
-							new Weapon(i * 16, j * 16, 16, 16, Entity.BULLET));
+							new Bullet(i << 4, j << 4, 16, 16, Entity.BULLET));
 				} else if (p == 0xFF007F0E) {
 					Game.entities.add(
-							new Weapon(i * 16, j * 16, 16, 16, Entity.GUN));
+							new Weapon(i << 4, j << 4, 16, 16, Entity.GUN));
 				} else if (p == 0xFFFFFFFF) {
-					tiles[i][j] = new TileWall(i * 16, j * 16, Tile.TILE_WALL);
+					tiles[i][j] = new TileWall(i << 4, j << 4, Tile.TILE_WALL);
 				} else if (p == 0xFF0033FF) {
-					Game.player.setX(j * 16);
-					Game.player.setY(i * 16);
+					Game.player.setX(j << 4);
+					Game.player.setY(i << 4);
 
 				}
 				c++;
@@ -59,23 +60,12 @@ public class World {
 
 	}
 	public void render(Graphics g) {
-		int xstart = Camera.y >> 4;
-		int ystart = Camera.y >> 4;
-		int xfinal = xstart + (Game.WIDTH >> 4);
-		int yfinal = xstart + (Game.HEIGHT >> 4);
-		int offeset = 16;
-		for (int i = 0; i <= HEIGHT; i++) {
-			for (int j = 0; j <= WIDTH; j++) {
 
-				if (j < 0 || i < 0 || i >= HEIGHT || j >= WIDTH)
-					continue;
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
 				if (tiles[i][j] != null) {
 					tiles[i][j].tick();
-					int x = tiles[i][j].x;
-					int y = tiles[i][j].y;
-					if (x+offeset >= 0 && x-offeset <= Game.WIDTH)
-						if (y+offeset >= 0 && y-offeset <= Game.HEIGHT)
-							tiles[i][j].render(g);
+					tiles[i][j].render(g);
 				}
 			}
 		}

@@ -19,11 +19,14 @@ public class Player extends Entity {
 	}
 	public void tick() {
 		super.tick();
+		Camera.x = this.getX() - (Game.WIDTH >> 1);
+		Camera.y = this.getY() - (Game.HEIGHT >> 1);
 
-		Camera.x = Camera.clamp(this.getX() - (Game.WIDTH >> 1), 0,
-				World.WIDTH*16 - Game.WIDTH);
-		Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT >> 1), 0,
-				World.HEIGHT*16 - Game.HEIGHT);
+
+		// Camera.x = Camera.clamp(this.getX() - (Game.WIDTH >> 1),
+		// 0,World.WIDTH*16 - Game.WIDTH);
+		// Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT >> 1), 0,
+		// World.HEIGHT * 16 - Game.HEIGHT);
 		if (right) {
 			x += speed;
 		} else if (left) {

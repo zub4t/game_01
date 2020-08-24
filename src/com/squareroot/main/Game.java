@@ -3,6 +3,7 @@ package com.squareroot.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
@@ -21,7 +22,7 @@ import com.squareroot.world.Camera;
 import com.squareroot.world.World;
 public class Game extends Canvas implements Runnable, KeyListener {
 	public static int WIDTH = 300;
-	public static int HEIGHT = 200;
+	public static int HEIGHT = 300;
 	public static JFrame jframe;
 	public boolean isRunning;
 	public static int SCALE = 2;
@@ -90,7 +91,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			entity.tick();
 
 		}
-	
 
 	}
 	public synchronized void render() {
@@ -106,8 +106,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		for (Entity entity : entities) {
 			entity.render(g);
 		}
-		g.setColor(Color.black);		
+		g.setColor(Color.black);
 		g.drawRect(Camera.x, Camera.y, 16, 16);
+		g.drawString("[" + Camera.x / 16 + "]" + "+[" + Camera.y / 16 + "]", 16,
+				16);
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE,
@@ -132,7 +134,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			player.setLeft(true);
 			player.setFrame_x(5);
 			player.setFrame_y(1);
-			vk_left_press=true;
+			vk_left_press = true;
 
 		}
 
@@ -152,11 +154,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT
 				|| e.getKeyCode() == KeyEvent.VK_D) {
 			player.setRight(false);
-			vk_right_press= false;
+			vk_right_press = false;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT
 				|| e.getKeyCode() == KeyEvent.VK_A) {
 			player.setLeft(false);
-			vk_left_press=false;
+			vk_left_press = false;
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_UP

@@ -61,8 +61,8 @@ public class Entity {
 
 	}
 	public void tick() {
-		this.x -= Camera.x;
-		this.y -= Camera.y;
+		//this.x -= Camera.x;
+		//this.y -= Camera.y;
 
 	}
 
