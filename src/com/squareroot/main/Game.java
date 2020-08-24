@@ -20,13 +20,15 @@ import com.squareroot.entities.Player;
 import com.squareroot.graphics.SpriteSheet;
 import com.squareroot.world.Camera;
 import com.squareroot.world.World;
+
 public class Game extends Canvas implements Runnable, KeyListener {
 	public static int WIDTH = 300;
 	public static int HEIGHT = 300;
 	public static JFrame jframe;
 	public boolean isRunning;
 	public static int SCALE = 2;
-	public BufferedImage layer;
+	public static BufferedImage layer;
+	public static Graphics g;
 	public static List<Entity> entities;
 	public static SpriteSheet spritesheet;
 	public static Player player;
@@ -43,14 +45,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 		entities = new ArrayList<>();
 		spritesheet = new SpriteSheet("/spriteSheet.png");
-		player = new Player(0, 0, 16, 16,
-				spritesheet.getSprite(2 * 16, 0 * 16, 16, 16));
+		player = new Player(0, 0, 16, 16, spritesheet.getSprite(2 * 16, 0 * 16, 16, 16));
 		world = new World("/map.png");
 
 		entities.add(player);
-		layer = new BufferedImage(this.WIDTH, this.HEIGHT,
-				BufferedImage.TYPE_INT_RGB);
+		layer = new BufferedImage(this.WIDTH, this.HEIGHT, BufferedImage.TYPE_INT_RGB);
 	}
+
 	public static void main(String[] args) {
 		Game game = new Game();
 
@@ -63,6 +64,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		game.isRunning = true;
 		new Thread(game).start();
 	}
+
 	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
@@ -86,6 +88,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			}
 		}
 	}
+
 	public synchronized void tick() {
 		for (Entity entity : entities) {
 			entity.tick();
@@ -93,44 +96,47 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 
 	}
+
 	public synchronized void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if (bs == null) {
 			this.createBufferStrategy(3);
 			return;
 		}
-		Graphics g = layer.getGraphics();
+		g = layer.getGraphics();
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.WIDTH, this.HEIGHT);
 		world.render(g);
+		player.render(g);
+
 		for (Entity entity : entities) {
 			entity.render(g);
 		}
 		g.setColor(Color.black);
-		g.drawRect(Camera.x, Camera.y, 16, 16);
-		g.drawString("[" + Camera.x / 16 + "]" + "+[" + Camera.y / 16 + "]", 16,
-				16);
+		g.drawRect(Camera.x >> 4, Camera.y >> 4, 16, 16);
+		g.drawString("[" + (Camera.x >> 4) + "]" + "[" + (Camera.y >> 4) + "]", 16, 16);
 		g.dispose();
 		g = bs.getDrawGraphics();
-		g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE,
-				this.HEIGHT * this.SCALE, null);
+		g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE, this.HEIGHT * this.SCALE, null);
 		bs.show();
+
 	}
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 
 	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!vk_right_press && (e.getKeyCode() == KeyEvent.VK_RIGHT
-				|| e.getKeyCode() == KeyEvent.VK_D)) {
+		if (!vk_right_press && (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)) {
+
 			player.setRight(true);
 			vk_right_press = true;
 			player.setFrame_x(2);
 			player.setFrame_y(0);
 
-		} else if (!vk_left_press && (e.getKeyCode() == KeyEvent.VK_LEFT
-				|| e.getKeyCode() == KeyEvent.VK_A)) {
+		} else if (!vk_left_press && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)) {
 			player.setLeft(true);
 			player.setFrame_x(5);
 			player.setFrame_y(1);
@@ -138,35 +144,30 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_UP
-				|| e.getKeyCode() == KeyEvent.VK_W) {
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			player.setUp(true);
 
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN
-				|| e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.setDown(true);
 
 		}
 
 	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT
-				|| e.getKeyCode() == KeyEvent.VK_D) {
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.setRight(false);
 			vk_right_press = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT
-				|| e.getKeyCode() == KeyEvent.VK_A) {
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			player.setLeft(false);
 			vk_left_press = false;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_UP
-				|| e.getKeyCode() == KeyEvent.VK_W) {
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			player.setUp(false);
 
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN
-				|| e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.setDown(false);
 
 		}

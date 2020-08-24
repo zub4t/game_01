@@ -16,53 +16,57 @@ public class Entity {
 		this.height = height;
 		this.sprite = sprite;
 	}
-	public static BufferedImage LIFE_PACK = Game.spritesheet.getSprite(6 * 16,
-			0, 16, 16);
-	public static BufferedImage GUN = Game.spritesheet.getSprite(7 * 16, 0, 16,
-			16);
-	public static BufferedImage BULLET = Game.spritesheet.getSprite(8 * 16, 0,
-			16, 16);
-	public static BufferedImage ENEMY = Game.spritesheet.getSprite(9 * 16, 0,
-			16, 16);
 
-	protected int x;
-	protected int y;
+	public static BufferedImage LIFE_PACK = Game.spritesheet.getSprite(6 * 16, 0, 16, 16);
+	public static BufferedImage GUN = Game.spritesheet.getSprite(7 * 16, 0, 16, 16);
+	public static BufferedImage BULLET = Game.spritesheet.getSprite(8 * 16, 0, 16, 16);
+	public static BufferedImage ENEMY = Game.spritesheet.getSprite(9 * 16, 0, 16, 16);
+
+	protected double x;
+	protected double y;
 	protected int weight;
 	protected int height;
 
 	protected BufferedImage sprite;
-	public int getX() {
+
+	public double getX() {
 		return x;
 	}
-	public void setX(int x) {
+
+	public void setX(double x) {
 		this.x = x;
 	}
-	public int getY() {
+
+	public double getY() {
 		return y;
 	}
-	public void setY(int y) {
+
+	public void setY(double y) {
 		this.y = y;
 	}
+
 	public int getWeight() {
 		return weight;
 	}
+
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
+
 	public int getHeight() {
 		return height;
 	}
+
 	public void setHeight(int height) {
 		this.height = height;
 	}
 
 	public void render(Graphics g) {
-		g.drawImage(sprite, this.getX(), this.getY(), null);
+		g.drawImage(sprite, (int) this.getX() - Camera.x, (int) this.getY() - Camera.y, null);
 
 	}
+
 	public void tick() {
-		//this.x -= Camera.x;
-		//this.y -= Camera.y;
 
 	}
 
