@@ -20,6 +20,7 @@ import com.squareroot.entities.Entity;
 import com.squareroot.entities.Player;
 import com.squareroot.graphics.SpriteSheet;
 import com.squareroot.util.Astar;
+import com.squareroot.util.Point;
 import com.squareroot.world.Camera;
 import com.squareroot.world.World;
 
@@ -85,7 +86,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	    }
 	    if (timer + 1000 <= System.currentTimeMillis()) {
 		timer = System.currentTimeMillis();
-		System.out.println("fps:" + fps);
+		// System.out.println("fps:" + fps);
 		fps = 0;
 		Enemy.teste = true;
 	    }
@@ -114,7 +115,17 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	world.render(g);
 	for (Entity entity : entities) {
 	    entity.render(g);
+	    if (entity instanceof Enemy) {
+		Enemy e = (Enemy) entity;
+		for (int i = 0; i < e._list.size() - 1; i++) {
+		    Point p1 = e._list.get(i);
+		    Point p2 = e._list.get(i + 1);
+		    g.drawLine(p1.x - Camera.x, p1.y - Camera.y, p2.x - Camera.x, p2.y - Camera.y);
+
+		}
+	    }
 	}
+
 	g.setColor(Color.black);
 	g.drawRect(Camera.x >> 4, Camera.y >> 4, 16, 16);
 	g.drawString("[" + (player.getFrame_x()) + "]" + "[" + (player.getFrame_x()) + "]", 16, 16);

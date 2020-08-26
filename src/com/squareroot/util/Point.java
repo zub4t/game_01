@@ -12,8 +12,6 @@ public class Point implements Comparable<Point> {
 	this.parent = parent;
     }
 
-    int x;
-
     public Point(int x, int y, int d) {
 	super();
 	this.x = x;
@@ -21,7 +19,9 @@ public class Point implements Comparable<Point> {
 	this.d = d;
     }
 
-    int y;
+    public int x;
+
+    public int y;
     int d;
     Point parent;
 

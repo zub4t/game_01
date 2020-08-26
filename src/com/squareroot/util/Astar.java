@@ -21,10 +21,9 @@ public class Astar {
 	    List<Point> list = new ArrayList<>();
 	    Point destiny = new Point(destint_x, destiny_y, 0, null);
 	    minheap.insert(root);
-	    double timer_m = -5;
+
 	    while (true) {
 		timer = System.currentTimeMillis();
-		minheap.minHeap();
 
 		Point current = minheap.remove();
 		if (current.compareTo(destiny) == 0) {
@@ -34,7 +33,7 @@ public class Astar {
 		    }
 		    // printElements(list);
 		    list = reverseArrayList(list);
-		    System.out.printf("list - size %d maior time lopp %f\n ", list.size(), timer_m);
+		    System.out.printf("time até encontrar %f\n ", System.currentTimeMillis() - timer);
 		    max++;
 		    return list;
 		}
@@ -65,10 +64,7 @@ public class Astar {
 			// System.out.printf("valor fora do intervalo [%d][%d]\n", p.x, p.y);
 		    }
 		}
-		if (timer_m <= System.currentTimeMillis() - timer) {
-		    timer_m = System.currentTimeMillis() - timer;
 
-		}
 	    }
 
 	}

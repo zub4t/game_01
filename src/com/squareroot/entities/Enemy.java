@@ -16,14 +16,14 @@ public class Enemy extends Entity {
     public static boolean teste = true;
     int wating_time;
 
-    List<Point> _list = new ArrayList<>();
+    public  List<Point> _list = new ArrayList<>();
 
     public Enemy(int x, int y, int weight, int height, BufferedImage sprite) {
 	super(x, y, weight, height, sprite);
 	timer = System.currentTimeMillis();
 	Random r = new Random();
-	int low = 2000;
-	int high = 6000;
+	int low = 1000;
+	int high = 2000;
 	wating_time = r.nextInt(high - low) + low;
 
     }
@@ -41,16 +41,11 @@ public class Enemy extends Entity {
 	    return;
 	} else {
 	    Astar astar = new Astar();
-	    if (teste && Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
+	    if (teste & Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
 		    (int) Game.player.getY()) > 0) {
-		System.out.println("CHAMANDO ");
-		(new Thread() {
-		    @Override
-		    public void run() {
-			_list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
 
-		    }
-		}).start();
+		_list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
+
 		teste = false;
 	    } else {
 
