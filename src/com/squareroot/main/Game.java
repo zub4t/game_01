@@ -15,9 +15,11 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import com.squareroot.entities.Enemy;
 import com.squareroot.entities.Entity;
 import com.squareroot.entities.Player;
 import com.squareroot.graphics.SpriteSheet;
+import com.squareroot.util.Astar;
 import com.squareroot.world.Camera;
 import com.squareroot.world.World;
 
@@ -85,8 +87,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		timer = System.currentTimeMillis();
 		System.out.println("fps:" + fps);
 		fps = 0;
+		Enemy.teste = true;
 	    }
+
 	}
+
     }
 
     public synchronized void tick() {

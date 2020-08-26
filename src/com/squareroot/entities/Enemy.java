@@ -13,8 +13,9 @@ import com.squareroot.util.Point;
 public class Enemy extends Entity {
     public double speed = 1;
     double timer;
-    boolean teste = true;
+    public static boolean teste = true;
     int wating_time;
+
     List<Point> _list = new ArrayList<>();
 
     public Enemy(int x, int y, int weight, int height, BufferedImage sprite) {
@@ -28,67 +29,49 @@ public class Enemy extends Entity {
     }
 
     public void tick() {
-	if (teste) {
-	    Thread thread = new Thread() {
-		public void run() {
-		    _list.clear();
-		    Astar astar = new Astar();
-		    _list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
 
-		}
-	    };
-	    thread.start();
-	    teste = false;
-	    return ;
-	}
-	if (!_list.isEmpty()) {
+	if (!_list.isEmpty())
+
+	{
 	    Point current = _list.get(0);
 	    _list.remove(0);
 	    this.x = current.getX();
 	    this.y = current.getY();
 
 	    return;
-	} else if (timer + 1000 <= System.currentTimeMillis()) {
-	    teste = true;
-	    timer = System.currentTimeMillis();
+	} else {
+	    Astar astar = new Astar();
+	    if (teste && Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
+		    (int) Game.player.getY()) > 0) {
+		System.out.println("CHAMANDO ");
+		(new Thread() {
+		    @Override
+		    public void run() {
+			_list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
 
+		    }
+		}).start();
+		teste = false;
+	    } else {
+
+		if (Game.player.getX() > this.getX()) {
+		    if (canMoveTo(this.x + this.speed, this.y))
+			this.setX(this.getX() + this.speed);
+		} else if (Game.player.getX() < this.getX()) {
+		    if (canMoveTo(this.x - this.speed, this.y))
+			this.setX(this.getX() - this.speed);
+		}
+
+		if (Game.player.getY() > this.getY()) {
+		    if (canMoveTo(this.x, this.y + this.speed))
+			this.setY(this.getY() + this.speed);
+		} else if (Game.player.getY() < this.getY()) {
+		    if (canMoveTo(this.x, this.y - this.speed))
+			this.setY(this.getY() - this.speed);
+		}
+	    }
 	    return;
 	}
-
-//
-//	if (Game.player.getX() > this.getX()) {
-//	    if (canMoveTo(this.x + this.speed, this.y))
-//		this.setX(this.getX() + this.speed);
-//	} else if (Game.player.getX() < this.getX()) {
-//	    if (canMoveTo(this.x - this.speed, this.y))
-//		this.setX(this.getX() - this.speed);
-//	}
-//
-//	if (Game.player.getY() > this.getY()) {
-//	    if (canMoveTo(this.x, this.y + this.speed))
-//		this.setY(this.getY() + this.speed);
-//	} else if (Game.player.getY() < this.getY()) {
-//	    if (canMoveTo(this.x, this.y - this.speed))
-//		this.setY(this.getY() - this.speed);
-//	}
-
-	// meter um A* dps
-//		if (test) {
-//			for (Point p : _list) {
-//				if (timer + 1000 <= System.currentTimeMillis()) {
-//					this.x = p.getX();
-//					this.y = p.getY();
-//					timer = System.currentTimeMillis();
-//
-//				}
-//
-//			}
-//			test = false;
-//		}
-
-//		if (timer + 1000 <= System.currentTimeMillis()) {
-//			thread.start();
-//			timer = System.currentTimeMillis();
 
     }
 
