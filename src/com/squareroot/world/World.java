@@ -4,9 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
+import com.squareroot.Util.Astart;
+import com.squareroot.Util.Point;
 import com.squareroot.entities.Bullet;
 import com.squareroot.entities.Enemy;
 import com.squareroot.entities.Entity;
@@ -67,31 +72,41 @@ public class World {
 				}
 			}
 
-//			for (int i = 0; i < tiles.length; i++) {
-//				for (int j = 0; j < tiles[0].length; j++) {
-//					if (tiles[j][i] instanceof TileWall) {
-//						System.out.print("*");
-//					} else {
-//						System.out.print("-");
-//					}
-//				}
-//				System.out.println("");
-//			}
-//			System.out.printf("outra  tamanho [%d][%d]\n", tilesWORLD[0].length, tilesWORLD.length);
-
-			for (int i = 0; i < tilesWORLD.length; i++) {
-				for (int j = 0; j < tilesWORLD[0].length; j++) {
-					if (tilesWORLD[j][i]) {
-						System.out.print("*");
-					} else {
-						System.out.print("-");
-					}
-				}
-				System.out.println("");
-			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+//	
+//		List<Point> list  = Astart.moveTo(48, 16, 32, 272);
+//		System.out.println("");
+
+	}
+
+	public void miniMap() {
+		for (int i = 0; i < tiles.length; i++) {
+			for (int j = 0; j < tiles[0].length; j++) {
+				if (tiles[j][i] instanceof TileWall) {
+					System.out.print("*");
+				} else {
+					System.out.print("-");
+				}
+			}
+			System.out.println("");
+		}
+		System.out.printf("outra  tamanho [%d][%d]\n", tilesWORLD[0].length, tilesWORLD.length);
+	}
+
+	public void realMap() {
+
+		for (int i = 0; i < tilesWORLD.length; i++) {
+			for (int j = 0; j < tilesWORLD[0].length; j++) {
+				if (tilesWORLD[j][i]) {
+					System.out.print("*");
+				} else {
+					System.out.print("-");
+				}
+			}
+			System.out.println("");
 		}
 
 	}

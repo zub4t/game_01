@@ -10,9 +10,11 @@ import com.squareroot.world.World;
 
 public class Player extends Entity {
 	private boolean right, up, left, down;
-	private double speed = 1;
+	private double speed = 2;
 	private int frame_x = 2;
 	private int frame_y = 0;
+	private boolean ctr_x_right = false;
+	private boolean ctr_x_left = true;
 
 	public Player(int x, int y, int weight, int height, BufferedImage sprite) {
 		super(x, y, weight, height, sprite);
@@ -21,7 +23,6 @@ public class Player extends Entity {
 	}
 
 	public void tick() {
-		super.tick();
 
 		Camera.x = Camera.clamp((int) this.getX() - (Game.WIDTH >> 1), 0, World.WIDTH * 16 - Game.WIDTH);
 		Camera.y = Camera.clamp((int) this.getY() - (Game.HEIGHT >> 1), 0, World.HEIGHT * 16 - Game.HEIGHT + 16 * 1);
@@ -40,60 +41,46 @@ public class Player extends Entity {
 				y -= speed;
 			}
 		} else if (down) {
-			if (canMoveTo(this.x + this.speed, this.y + this.speed)) {
+			if (canMoveTo(this.x, this.y + this.speed)) {
 				y += speed;
 			}
 		}
+		super.tick();
 
-	}
-
-	public boolean canMoveTo(double d, double y) {
-		System.out.println("");
-
-		boolean res = false;
-		for (int i = (int) d; i < 15 + (int) d; i++) {
-			for (int j = (int) (y); j < 15 + (int) (y); j++) {
-				res = res || World.tilesWORLD[i][j];
-			}
-		}
-
-		for (int i = (int) d; i < 15 + (int) d; i++) {
-			for (int j = (int) (y); j < 15 + (int) (y); j++) {
-				if (World.tilesWORLD[i][j]) {
-					System.out.print("*");
-				} else {
-					System.out.print("-");
-
-				}
-			}
-			System.out.println("");
-		}
-		return !res;
 	}
 
 	@Override
 	public void render(Graphics g) {
 		super.render(g);
+		if (frame_x < 6)
+			Game.player.sprite = Game.spritesheet.getSprite(this.frame_x * 16, frame_y * 16, 16, 16);
 
-		Game.player.sprite = Game.spritesheet.getSprite(this.frame_x * 16, frame_y * 16, 16, 16);
-
-		if (Game.fps % 30 == 0) {
-			if (this.right) {
-				frame_x++;
-				if (frame_x > 5) {
-					frame_x = 2;
-				}
-			} else {
-				frame_x--;
-				if (frame_x < 2) {
-					frame_x = 5;
-				}
+		if (this.left) {
+			this.frame_y = 1;
+			if (ctr_x_left) {
+				ctr_x_left = false;
+				ctr_x_right = true;
+				frame_x = 5;
 			}
-			if (this.left)
-				this.frame_y = 1;
-			else
-				this.frame_y = 0;
+		} else if (this.right) {
+			this.frame_y = 0;
+			if (ctr_x_right) {
+				ctr_x_right = false;
+				ctr_x_left = true;
+				frame_x = 2;
+			}
 		}
+
+		if (Game.fps % 10 == 0) {
+
+
+			
+			frame_x += 1;
+			if (frame_x > 5)
+				frame_x = 2;
+
+		}
+	
 	}
 
 	public boolean isRight() {

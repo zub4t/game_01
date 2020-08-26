@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.squareroot.main.Game;
 import com.squareroot.world.Camera;
+import com.squareroot.world.World;
 
 public class Entity {
 
@@ -59,6 +60,71 @@ public class Entity {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public void debugCheckView(double d, double y, int box_size, int off_set_x) {
+		for (int i = (int) d + off_set_x; i < box_size + (int) d - off_set_x; i++) {
+			if (World.tilesWORLD[i][(int) y]) {
+				System.out.print("*");
+			} else {
+				System.out.print("--");
+
+			}
+
+		}
+		System.out.println("");
+		for (int i = (int) d + off_set_x; i < box_size + (int) d - off_set_x; i++) {
+
+			if (World.tilesWORLD[i][(int) y + box_size - off_set_x]) {
+				System.out.print("*");
+			} else {
+				System.out.print("--");
+
+			}
+
+		}
+	}
+
+	public boolean checkView(double d, double y) {
+		int box_size = 16;
+		int off_set_x = 2;
+//		int off_set_y = 2;
+		boolean res = false;
+		try {
+			for (int i = (int) d + off_set_x; i < box_size + (int) d - off_set_x; i++) {
+				res = res || World.tilesWORLD[i][(int) y];
+
+			}
+			for (int i = (int) d + off_set_x; i < box_size + (int) d - off_set_x; i++) {
+				res = res || World.tilesWORLD[i][(int) y + box_size - off_set_x];
+
+			}
+			for (int i = (int) d + off_set_x; i < box_size + (int) d - off_set_x; i++) {
+				res = res || World.tilesWORLD[i][(int) y + box_size - off_set_x];
+
+			}
+			// debugCheckView(d, y, box_size, off_set_x);
+
+//			for (int i = (int) y + off_set_x; i < box_size + (int) y - off_set_y; i++) {
+//				res = res || World.tilesWORLD[(int) d][i];
+//
+//			}
+//			for (int i = (int) y + off_set_x; i < box_size + (int) y - off_set_y; i++) {
+//				res = res || World.tilesWORLD[(int) d + box_size - off_set_x][i];
+//
+//			}
+
+		} catch (Exception e) {
+
+		}
+		return res;
+
+	}
+
+	public boolean canMoveTo(double d, double y) {
+
+		boolean res = checkView(d, y);
+		return !res;
 	}
 
 	public void render(Graphics g) {

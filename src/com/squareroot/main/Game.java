@@ -67,6 +67,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	@Override
 	public void run() {
+		requestFocus();
 		long lastTime = System.nanoTime();
 		double delta = 0;
 		double ns = 1000000000 / 60.0;
@@ -107,14 +108,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.WIDTH, this.HEIGHT);
 		world.render(g);
-		player.render(g);
-
 		for (Entity entity : entities) {
 			entity.render(g);
 		}
 		g.setColor(Color.black);
 		g.drawRect(Camera.x >> 4, Camera.y >> 4, 16, 16);
-		g.drawString("[" + (Camera.x >> 4) + "]" + "[" + (Camera.y >> 4) + "]", 16, 16);
+		g.drawString("[" + (player.getFrame_x()) + "]" + "[" + (player.getFrame_x()) + "]", 16, 16);
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE, this.HEIGHT * this.SCALE, null);
