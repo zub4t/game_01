@@ -69,6 +69,11 @@ public class Point implements Comparable<Point> {
 
     }
 
+    @Override
+    public String toString() {
+	return "[" + x + "][" + y + "]->(" + d + ")";
+    }
+
     public List<Point> makeNeighborhood() {
 	List<Point> list = new ArrayList<>();
 	Point W = new Point(x - 1, y, 0, this);

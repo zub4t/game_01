@@ -83,7 +83,7 @@ public class MinHeap {
 	Heap[++size] = element;
 	int current = size;
 
-	while (Heap[current].getD() < Heap[parent(current)].getD()) {
+	while (current > 1 && Heap[current].getD() < Heap[parent(current)].getD()) {
 	    swap(current, parent(current));
 	    current = parent(current);
 	}
@@ -130,8 +130,9 @@ public class MinHeap {
     // element from the heap
     public Point remove() {
 	Point popped = Heap[FRONT];
-	Heap[FRONT] = Heap[size--];
+	Heap[FRONT] = Heap[size];
 	minHeapify(FRONT);
+	size--;
 	return popped;
     }
 
