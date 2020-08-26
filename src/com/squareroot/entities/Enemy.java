@@ -4,19 +4,19 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.squareroot.Util.Astart;
-import com.squareroot.Util.Point;
+//import com.squareroot.Util.Astart;
+//import com.squareroot.Util.Point;
 import com.squareroot.entities.Entity;
 import com.squareroot.main.Game;
 
 public class Enemy extends Entity {
 	public double speed = 1;
 	double timer;
-	List<Point> _list = new ArrayList<>();
+	//List<Point> _list = new ArrayList<>();
 
 	public Enemy(int x, int y, int weight, int height, BufferedImage sprite) {
 		super(x, y, weight, height, sprite);
-		_list = Astart.moveTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
+		//_list = Astart.moveTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
 
 	}
 

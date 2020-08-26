@@ -10,8 +10,8 @@ import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
-import com.squareroot.Util.Astart;
-import com.squareroot.Util.Point;
+//import com.squareroot.Util.Astart;
+//import com.squareroot.Util.Point;
 import com.squareroot.entities.Bullet;
 import com.squareroot.entities.Enemy;
 import com.squareroot.entities.Entity;
