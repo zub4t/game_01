@@ -38,6 +38,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public static int fps;
     public boolean vk_right_press;
     public boolean vk_left_press;
+    public static double timer_tick;
 
     private World world;
 
@@ -80,7 +81,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	    lastTime = now;
 	    if (delta >= 1) {
 		tick();
+
 		render();
+
 		fps++;
 		delta--;
 	    }
@@ -88,7 +91,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		timer = System.currentTimeMillis();
 		// System.out.println("fps:" + fps);
 		fps = 0;
-		Enemy.teste = true;
+		Astar.key = true;
 	    }
 
 	}
@@ -97,7 +100,20 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public synchronized void tick() {
 	for (Entity entity : entities) {
+
+	    timer_tick = System.currentTimeMillis();
 	    entity.tick();
+	    if (entity instanceof Enemy) {
+		Enemy e = (Enemy) entity;
+		// System.out.println(e.name);
+		if (System.currentTimeMillis() - timer_tick > 0) {
+
+		    System.out.printf("Time %.0f Name %s , [%.0f][%.0f] to [%.0f][%.0f]\n",
+			    System.currentTimeMillis() - timer_tick, e.name, e.getX(), e.getY(), player.getX(),
+			    player.getY());
+
+		}
+	    }
 
 	}
 
@@ -129,10 +145,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	g.setColor(Color.black);
 	g.drawRect(Camera.x >> 4, Camera.y >> 4, 16, 16);
 	g.drawString("[" + (player.getFrame_x()) + "]" + "[" + (player.getFrame_x()) + "]", 16, 16);
-	g.dispose();
+
 	g = bs.getDrawGraphics();
 	g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE, this.HEIGHT * this.SCALE, null);
 	bs.show();
+	g.dispose();
 
     }
 

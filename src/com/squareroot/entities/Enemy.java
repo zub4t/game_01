@@ -15,16 +15,17 @@ public class Enemy extends Entity {
     double timer;
     public static boolean teste = true;
     int wating_time;
-
-    public  List<Point> _list = new ArrayList<>();
+    public String name;
+    public List<Point> _list = new ArrayList<>();
 
     public Enemy(int x, int y, int weight, int height, BufferedImage sprite) {
 	super(x, y, weight, height, sprite);
 	timer = System.currentTimeMillis();
 	Random r = new Random();
-	int low = 1000;
-	int high = 2000;
+	int low = 10;
+	int high = 100;
 	wating_time = r.nextInt(high - low) + low;
+	name = "Enemy_" + id;
 
     }
 
@@ -41,12 +42,18 @@ public class Enemy extends Entity {
 	    return;
 	} else {
 	    Astar astar = new Astar();
-	    if (teste & Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
-		    (int) Game.player.getY()) > 0) {
+	    if (teste
+		    && Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
+			    (int) Game.player.getY()) > 50
+		    && Astar.calcManhattanDistance((int) x, (int) y, (int) Game.player.getX(),
+			    (int) Game.player.getY()) < 200
+
+	    ) {
+		teste = false;
 
 		_list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
-
-		teste = false;
+		timer = System.currentTimeMillis();
+		teste = true;
 	    } else {
 
 		if (Game.player.getX() > this.getX()) {

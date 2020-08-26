@@ -75,9 +75,11 @@ public class World {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-
-
-
+//	double timer = System.currentTimeMillis();
+//	Astar astar = new Astar();
+//	astar.findPathTo(190, 16, 14, 16);
+//	System.out.println(System.currentTimeMillis() - timer);
+//System.out.println("");
     }
 
     public void miniMap() {
