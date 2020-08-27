@@ -75,11 +75,13 @@ public class World {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-//	double timer = System.currentTimeMillis();
-//	Astar astar = new Astar();
-//	astar.findPathTo(190, 16, 14, 16);
-//	System.out.println(System.currentTimeMillis() - timer);
-//System.out.println("");
+	double timer = System.currentTimeMillis();
+	Astar astar = new Astar();
+	//List<Point> list = astar.findPathTo(190, 16, 14, 16);
+	List<Point> list_y = astar.findPathToInNormalMap(190, 16, 14, 16);
+
+	System.out.println(System.currentTimeMillis() - timer);
+	System.out.println("");
     }
 
     public void miniMap() {

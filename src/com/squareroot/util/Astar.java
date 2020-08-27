@@ -79,6 +79,7 @@ public class Astar {
 	MinHeap openList = new MinHeap(World.WIDTH * World.HEIGHT);
 	Point start_node = new Point(origin_x, origin_y, 0, null);
 	Point destiny = new Point(destiny_x, destiny_y, 0, null);
+	start_node.h = calcManhattanDistance(start_node.x, start_node.y, destiny.x, destiny.y);
 
 	Point isInOpenList[][] = new Point[World.WIDTH][World.HEIGHT];
 	Point isInClosedList[][] = new Point[World.WIDTH][World.HEIGHT];
@@ -87,7 +88,7 @@ public class Astar {
 	openList.insert(start_node);
 	while (openList.size > 0) {
 	    Point current_node = openList.remove();
-	    if (current_node.compareTo(destiny) == 0) {
+	    if (current_node.compareTo(destiny) == 0 || current_node.h < 1) {
 		while (current_node != null) {
 		    current_node.x = current_node.x << 4;
 		    current_node.y = current_node.y << 4;
@@ -96,10 +97,10 @@ public class Astar {
 		    current_node = current_node.parent;
 
 		}
-		list = reverseArrayList(list);
-		// printElements(list);
-		list = SmoothArray(list);
-		// printElements(list);
+		// list = reverseArrayList(list);
+		printElements(list);
+		// list = SmoothArray(list);
+		printElements(list);
 		return list;
 	    }
 	    List<Point> neighborhood = current_node.makeNeighborhood();
@@ -134,6 +135,7 @@ public class Astar {
 	    isInOpenList[current_node.x][current_node.y] = null;
 
 	}
+	System.out.printf("path n finded [%d][%d] to [%d][%d]", origin_x, origin_y, destiny_x, destiny_y);
 
 	return new ArrayList<Point>();
 
@@ -167,9 +169,9 @@ public class Astar {
 	    for (int j = 0; j < 16; j++) {
 		returned_list.add(new Point(previus.x + what_happened_x, previus.y + what_happened_y));
 		what_happened_x = what_happened_x == 0 ? 0
-			: what_happened_x > 1 ? what_happened_x + 1 : what_happened_x - 1;
+			: what_happened_x > 0 ? what_happened_x + 1 : what_happened_x - 1;
 		what_happened_y = what_happened_y == 0 ? 0
-			: what_happened_y > 1 ? what_happened_y + 1 : what_happened_y - 1;
+			: what_happened_y > 0 ? what_happened_y + 1 : what_happened_y - 1;
 	    }
 	}
 
