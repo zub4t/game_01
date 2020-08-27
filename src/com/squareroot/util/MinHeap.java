@@ -2,7 +2,7 @@ package com.squareroot.util;
 
 public class MinHeap {
     private Point[] Heap;
-    private int size;
+    public int size;
     private int maxsize;
 
     private static final int FRONT = 1;

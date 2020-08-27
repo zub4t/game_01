@@ -51,7 +51,7 @@ public class Enemy extends Entity {
 	    ) {
 		teste = false;
 
-		_list = astar.findPathTo((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
+		_list = astar.findPathToInNormalMap((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
 		timer = System.currentTimeMillis();
 		teste = true;
 	    } else {

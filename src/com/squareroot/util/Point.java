@@ -12,18 +12,25 @@ public class Point implements Comparable<Point> {
 	this.parent = parent;
     }
 
-    public Point(int x, int y, int d) {
+    public Point(int x, int y, int g) {
 	super();
 	this.x = x;
 	this.y = y;
-	this.d = d;
+	this.g = g;
+    }
+
+    public Point(int x, int y) {
+	super();
+	this.x = x;
+	this.y = y;
     }
 
     public int x;
-
     public int y;
-    int d;
-    Point parent;
+    public int d;
+    public int h;
+    public int g;
+    public Point parent;
 
     public int getX() {
 	return x;
@@ -76,14 +83,14 @@ public class Point implements Comparable<Point> {
 
     public List<Point> makeNeighborhood() {
 	List<Point> list = new ArrayList<>();
-	Point W = new Point(x - 1, y, 0, this);
-	Point L = new Point(x + 1, y, 0, this);
-	Point S = new Point(x, y + 1, 0, this);
-	Point N = new Point(x, y - 1, 0, this);
-	Point NW = new Point(x - 1, y - 1, 0, this);
-	Point NE = new Point(x + 1, y - 1, 0, this);
-	Point SW = new Point(x - 1, y + 1, 0, this);
-	Point SE = new Point(x + 1, y + 1, 0, this);
+	Point W = new Point(x - 1, y, this.g + 1, this);
+	Point L = new Point(x + 1, y, this.g + 1, this);
+	Point S = new Point(x, y + 1, this.g + 1, this);
+	Point N = new Point(x, y - 1, this.g + 1, this);
+	Point NW = new Point(x - 1, y - 1, this.g + 1, this);
+	Point NE = new Point(x + 1, y - 1, this.g + 1, this);
+	Point SW = new Point(x - 1, y + 1, this.g + 1, this);
+	Point SE = new Point(x + 1, y + 1, this.g + 1, this);
 
 	list.add(W);
 	list.add(L);
