@@ -21,12 +21,13 @@ import com.squareroot.entities.Player;
 import com.squareroot.graphics.SpriteSheet;
 import com.squareroot.util.Astar;
 import com.squareroot.util.Point;
+import com.squareroot.util.UI;
 import com.squareroot.world.Camera;
 import com.squareroot.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener {
     public static int WIDTH = 300;
-    public static int HEIGHT = 300;
+    public static int HEIGHT = 200;
     public static JFrame jframe;
     public boolean isRunning;
     public static int SCALE = 2;
@@ -136,15 +137,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		for (int i = 0; i < e._list.size() - 1; i++) {
 		    Point p1 = e._list.get(i);
 		    Point p2 = e._list.get(i + 1);
-		    g.drawLine(p1.x - Camera.x, p1.y - Camera.y, p2.x - Camera.x, p2.y - Camera.y);
+//		    g.drawLine(p1.x - Camera.x, p1.y - Camera.y, p2.x - Camera.x, p2.y - Camera.y);
 
 		}
 	    }
 	}
 
-	g.setColor(Color.black);
-	g.drawRect(Camera.x >> 4, Camera.y >> 4, 16, 16);
-	g.drawString("[" + (player.getFrame_x()) + "]" + "[" + (player.getFrame_x()) + "]", 16, 16);
+	UI.render(g);
 
 	g = bs.getDrawGraphics();
 	g.drawImage(layer, 0, 0, this.WIDTH * this.SCALE, this.HEIGHT * this.SCALE, null);

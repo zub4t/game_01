@@ -97,10 +97,10 @@ public class Astar {
 		    current_node = current_node.parent;
 
 		}
-		// list = reverseArrayList(list);
-		printElements(list);
-		// list = SmoothArray(list);
-		printElements(list);
+		list = reverseArrayList(list);
+		// printElements(list);
+		list = SmoothArray(list);
+		// printElements(list);
 		return list;
 	    }
 	    List<Point> neighborhood = current_node.makeNeighborhood();

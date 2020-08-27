@@ -87,9 +87,10 @@ public class Entity {
 	}
     }
 
+
     public static boolean checkView(double d, double y) {
 	int box_size = 16;
-	int off_set_x = 2;
+	int off_set_x = 1;
 //		int off_set_y = 2;
 	boolean res = false;
 	try {
