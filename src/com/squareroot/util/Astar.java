@@ -13,76 +13,19 @@ public class Astar {
     public static int max = 1;
     public static boolean key = true;
 
-    public List<Point> findPathTo(int origin_x, int origin_y, int destiny_x, int destiny_y) {
-	MinHeap openList = new MinHeap(World.WIDTH << 4 * World.HEIGHT << 4);
-	Point start_node = new Point(origin_x, origin_y, 0, null);
-	Point destiny = new Point(destiny_x, destiny_y, 0, null);
-
-	Point isInOpenList[][] = new Point[World.WIDTH << 4][World.HEIGHT << 4];
-	Point isInClosedList[][] = new Point[World.WIDTH << 4][World.HEIGHT << 4];
-	List<Point> list = new ArrayList();
-
-	openList.insert(start_node);
-	while (openList.size > 0) {
-	    Point current_node = openList.remove();
-	    if (current_node.compareTo(destiny) == 0) {
-		while (current_node != null) {
-		    list.add(current_node);
-		    current_node = current_node.parent;
-
-		}
-		list = reverseArrayList(list);
-		return list;
-	    }
-	    List<Point> neighborhood = current_node.makeNeighborhood();
-	    for (Point neighbor : neighborhood) {
-		try {
-		    if (Entity.canMoveTo(neighbor.x, neighbor.y)) {
-			int successor_current_cost = current_node.g + 1;
-			if (isInOpenList[neighbor.x][neighbor.y] != null) {
-			    if (neighbor.g <= successor_current_cost) {
-				continue;
-			    }
-			} else if (isInClosedList[neighbor.x][neighbor.y] != null) {
-			    if (neighbor.g <= successor_current_cost)
-				continue;
-			    isInOpenList[neighbor.x][neighbor.y] = isInClosedList[neighbor.x][neighbor.y];
-			    isInClosedList[neighbor.x][neighbor.y] = null;
-			    openList.insert(neighbor);
-			} else {
-			    neighbor.h = calcManhattanDistance(neighbor.x, neighbor.y, destiny.x, destiny.y);
-			    neighbor.d = neighbor.h + neighbor.g;
-			    isInOpenList[neighbor.x][neighbor.y] = neighbor;
-			    openList.insert(neighbor);
-			}
-		    }
-
-		} catch (Exception e) {
-		    System.out.println("fora do intervalo");
-		}
-
-	    }
-	    isInClosedList[current_node.x][current_node.y] = current_node;
-	    isInOpenList[current_node.x][current_node.y] = null;
-
-	}
-
-	return new ArrayList<Point>();
-
-    }
-
     public List<Point> findPathToInNormalMap(int origin_x, int origin_y, int destiny_x, int destiny_y) {
+
 	origin_x = origin_x >> 4;
 	origin_y = origin_y >> 4;
-	destiny_x = destiny_x >> 4;
-	destiny_y = destiny_y >> 4;
+	destiny_x = (destiny_x >> 4);
+	destiny_y = (destiny_y >> 4);
 	MinHeap openList = new MinHeap(World.WIDTH * World.HEIGHT);
 	Point start_node = new Point(origin_x, origin_y, 0, null);
 	Point destiny = new Point(destiny_x, destiny_y, 0, null);
 	start_node.h = calcManhattanDistance(start_node.x, start_node.y, destiny.x, destiny.y);
 
-	Point isInOpenList[][] = new Point[World.WIDTH][World.HEIGHT];
-	Point isInClosedList[][] = new Point[World.WIDTH][World.HEIGHT];
+	Point isInOpenList[][] = new Point[World.HEIGHT][World.WIDTH];
+	Point isInClosedList[][] = new Point[World.HEIGHT][World.WIDTH];
 	List<Point> list = new ArrayList();
 
 	openList.insert(start_node);
@@ -108,34 +51,34 @@ public class Astar {
 		try {
 		    if (Entity.canMoveTo(neighbor.x << 4, neighbor.y << 4)) {
 			int successor_current_cost = current_node.g + 1;
-			if (isInOpenList[neighbor.x][neighbor.y] != null) {
+			if (isInOpenList[neighbor.y][neighbor.x] != null) {
 			    if (neighbor.g <= successor_current_cost) {
 				continue;
 			    }
-			} else if (isInClosedList[neighbor.x][neighbor.y] != null) {
+			} else if (isInClosedList[neighbor.y][neighbor.x] != null) {
 			    if (neighbor.g <= successor_current_cost)
 				continue;
-			    isInOpenList[neighbor.x][neighbor.y] = isInClosedList[neighbor.x][neighbor.y];
-			    isInClosedList[neighbor.x][neighbor.y] = null;
+			    isInOpenList[neighbor.y][neighbor.x] = isInClosedList[neighbor.y][neighbor.x];
+			    isInClosedList[neighbor.y][neighbor.x] = null;
 			    openList.insert(neighbor);
 			} else {
 			    neighbor.h = calcManhattanDistance(neighbor.x, neighbor.y, destiny.x, destiny.y);
 			    neighbor.d = neighbor.h + neighbor.g;
-			    isInOpenList[neighbor.x][neighbor.y] = neighbor;
+			    isInOpenList[neighbor.y][neighbor.x] = neighbor;
 			    openList.insert(neighbor);
 			}
 		    }
 
 		} catch (Exception e) {
-		    System.out.println("fora do intervalo");
+		    e.printStackTrace();
 		}
 
 	    }
-	    isInClosedList[current_node.x][current_node.y] = current_node;
-	    isInOpenList[current_node.x][current_node.y] = null;
+	    isInClosedList[current_node.y][current_node.x] = current_node;
+	    isInOpenList[current_node.y][current_node.x] = null;
 
 	}
-	System.out.printf("path n finded [%d][%d] to [%d][%d]", origin_x, origin_y, destiny_x, destiny_y);
+	System.out.printf("path n finded [%d][%d] to [%d][%d]\n", origin_x, origin_y, destiny_x, destiny_y);
 
 	return new ArrayList<Point>();
 

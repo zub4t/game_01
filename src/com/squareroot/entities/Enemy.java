@@ -15,9 +15,8 @@ import com.squareroot.util.Point;
 import com.squareroot.world.Camera;
 
 public class Enemy extends Entity {
-    public double speed = 1;
+    public int speed = 1;
     double timer;
-    public static boolean teste = true;
     int size_list_random;
     public String name;
     private Random r;
@@ -27,10 +26,11 @@ public class Enemy extends Entity {
     private boolean ctr_x_right = false;
     private boolean ctr_x_left = true;
     public List<Point> _list = new ArrayList<>();
+    public int life = 3;
+    public boolean attacked;
 
     public Enemy(int x, int y, int weight, int height, BufferedImage sprite) {
 	super(x, y, weight, height, sprite);
-	timer = System.currentTimeMillis();
 	r = new Random();
 	int low = 1000;
 	int high = 2000;
@@ -40,16 +40,14 @@ public class Enemy extends Entity {
 
     }
 
-    public boolean hasSomeBodyHere(int x, int y) {
-	Rectangle my_rect = new Rectangle(x, y, 16, 16);
+    public boolean hasAnyBodyHere() {
 	for (Entity entity : Game.entities) {
 
 	    if (entity instanceof Enemy) {
 		Enemy e = (Enemy) entity;
-		Rectangle friend_rect = new Rectangle((int) e.x, (int) e.y, 16, 16);
-
-		if (!this.name.equals(e.name) && my_rect.intersects(friend_rect)) {
+		if (!(e.name.equals(this.name)) && isColliding(e)) {
 		    return true;
+
 		}
 
 	    }
@@ -59,74 +57,55 @@ public class Enemy extends Entity {
 
     public void tick() {
 
-	if (!hasSomeBodyHere((int) x, (int) y)) {
-
-	    if (!_list.isEmpty())
-
-	    {
-		Point current = _list.get(0);
-		_list.remove(0);
-		this.x = current.getX();
-		this.y = current.getY();
-
-		return;
-	    } else {
-		if (true) {
-		    teste = false;
-
-		    _list = astar.findPathToInNormalMap((int) x, (int) y, (int) Game.player.getX(),
-			    (int) Game.player.getY());
-		    timer = System.currentTimeMillis();
-		    teste = true;
-		} else {
-
-		    if (Game.player.getX() > this.getX()) {
-			if (canMoveTo(this.x + this.speed, this.y))
-			    this.setX(this.getX() + this.speed);
-		    } else if (Game.player.getX() < this.getX()) {
-			if (canMoveTo(this.x - this.speed, this.y))
-			    this.setX(this.getX() - this.speed);
-		    }
-
-		    if (Game.player.getY() > this.getY()) {
-			if (canMoveTo(this.x, this.y + this.speed))
-			    this.setY(this.getY() + this.speed);
-		    } else if (Game.player.getY() < this.getY()) {
-			if (canMoveTo(this.x, this.y - this.speed))
-			    this.setY(this.getY() - this.speed);
-		    }
-		}
-		return;
-	    }
-	} else {
-	    if (!_list.isEmpty()) {
-		Point current = _list.get(0);
-		_list.remove(0);
-		this.x = current.getX();
-		this.y = current.getY();
-
-	    } else {
-		int low = 10;
-		int high = 320;
-		_list = astar.findPathToInNormalMap((int) x, (int) y, (int) r.nextInt(320), (int) r.nextInt(320));
-	    }
-
+	if (life < 1) {
+	    Game.entities_to_remove_at_runtime.add(this);
 	}
+	if (!_list.isEmpty())
+
+	{
+	    Point current = _list.get(0);
+	    _list.remove(0);
+	    this.x = current.getX();
+	    this.y = current.getY();
+
+	    return;
+	} else {
+	    _list = astar.findPathToInNormalMap((int) x, (int) y, (int) Game.player.getX(), (int) Game.player.getY());
+	    timer = System.currentTimeMillis();
+
+	    return;
+	}
+
     }
 
     @Override
     public void render(Graphics g) {
-	super.render(g);
-	if (frame_x < 6)
-	    this.sprite = Game.spritesheet.getSprite(this.frame_x * 16, frame_y * 16, 16, 16);
+
+	this.sprite = Game.spritesheet.getSprite(this.frame_x * 16, frame_y * 16, 16, 16);
 
 	if (Game.fps % 10 == 0) {
+	    if (!attacked) {
+		frame_x += 1;
+		if (frame_x > 5)
+		    frame_x = 2;
+	    } else {
+		frame_x = 6;
+		(new Thread() {
+		    @Override
+		    public void run() {
+			try {
+			    Thread.sleep(100);
+			    attacked = false;
+			} catch (InterruptedException e) {
+			    e.printStackTrace();
+			}
 
-	    frame_x += 1;
-	    if (frame_x > 5)
-		frame_x = 2;
+		    }
+		}).start();
+	    }
 
 	}
+	super.render(g);
 
     }
 

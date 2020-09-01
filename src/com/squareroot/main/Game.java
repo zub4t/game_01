@@ -34,6 +34,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public static BufferedImage layer;
     public static Graphics g;
     public static List<Entity> entities;
+    public static List<Entity> entities_to_add_at_runtime;
+    public static List<Entity> entities_to_remove_at_runtime;
+
     public static SpriteSheet spritesheet;
     public static Player player;
     public static int fps;
@@ -45,12 +48,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public Game() {
 	addKeyListener(this);
-	jframe = new JFrame("RPG  game");
+	jframe = new JFrame("Game");
 	jframe.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 	entities = new ArrayList<>();
+	entities_to_add_at_runtime = new ArrayList<>();
+	entities_to_remove_at_runtime = new ArrayList<>();
 	spritesheet = new SpriteSheet("/spriteSheet.png");
 	player = new Player(0, 0, 16, 16, spritesheet.getSprite(2 * 16, 0 * 16, 16, 16));
-	world = new World("/map.png");
+	world = new World("/map_1.png");
 	entities.add(player);
 	layer = new BufferedImage(this.WIDTH, this.HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
@@ -88,9 +93,20 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		fps++;
 		delta--;
 	    }
+	    for (Entity e : entities_to_add_at_runtime) {
+		entities.add(e);
+
+	    }
+	    for (Entity e : entities_to_remove_at_runtime) {
+		
+		    entities.remove(e);
+
+	    }
+	    entities_to_add_at_runtime.clear();
+	    entities_to_remove_at_runtime.clear();
 	    if (timer + 1000 <= System.currentTimeMillis()) {
 		timer = System.currentTimeMillis();
-		// System.out.println("fps:" + fps);
+		//System.out.println("fps:" + fps);
 		fps = 0;
 		Astar.key = true;
 	    }
@@ -101,20 +117,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     public synchronized void tick() {
 	for (Entity entity : entities) {
-
 	    timer_tick = System.currentTimeMillis();
 	    entity.tick();
-	    if (entity instanceof Enemy) {
-		Enemy e = (Enemy) entity;
-		// System.out.println(e.name);
-		if (System.currentTimeMillis() - timer_tick > 0) {
-
-		    System.out.printf("Time %.0f Name %s , [%.0f][%.0f] to [%.0f][%.0f]\n",
-			    System.currentTimeMillis() - timer_tick, e.name, e.getX(), e.getY(), player.getX(),
-			    player.getY());
-
-		}
-	    }
 
 	}
 
@@ -132,15 +136,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	world.render(g);
 	for (Entity entity : entities) {
 	    entity.render(g);
-	    if (entity instanceof Enemy) {
-		Enemy e = (Enemy) entity;
-		for (int i = 0; i < e._list.size() - 1; i++) {
-		    Point p1 = e._list.get(i);
-		    Point p2 = e._list.get(i + 1);
-//		    g.drawLine(p1.x - Camera.x, p1.y - Camera.y, p2.x - Camera.x, p2.y - Camera.y);
-
-		}
-	    }
 	}
 
 	UI.render(g);
@@ -159,17 +154,17 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-	if (!vk_right_press && (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)) {
 
+	if (e.getKeyCode() == KeyEvent.VK_X) {
+	    player.setCan_shooting(true);
+	}
+
+	if (!vk_right_press && (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)) {
 	    player.setRight(true);
 	    vk_right_press = true;
-	    player.setFrame_x(2);
-	    player.setFrame_y(0);
 
 	} else if (!vk_left_press && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)) {
 	    player.setLeft(true);
-	    player.setFrame_x(5);
-	    player.setFrame_y(1);
 	    vk_left_press = true;
 
 	}
@@ -186,6 +181,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+	if (e.getKeyCode() == KeyEvent.VK_X) {
+	    player.setCan_shooting(false);
+	}
 	if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 	    player.setRight(false);
 	    vk_right_press = false;

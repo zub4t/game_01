@@ -87,6 +87,22 @@ public class Point implements Comparable<Point> {
 	Point L = new Point(x + 1, y, this.g + 1, this);
 	Point S = new Point(x, y + 1, this.g + 1, this);
 	Point N = new Point(x, y - 1, this.g + 1, this);
+
+	list.add(W);
+	list.add(L);
+	list.add(S);
+	list.add(N);
+
+	return list;
+
+    }
+
+    public List<Point> makeNeighborhoodHard() {
+	List<Point> list = new ArrayList<>();
+	Point W = new Point(x - 1, y, this.g + 1, this);
+	Point L = new Point(x + 1, y, this.g + 1, this);
+	Point S = new Point(x, y + 1, this.g + 1, this);
+	Point N = new Point(x, y - 1, this.g + 1, this);
 	Point NW = new Point(x - 1, y - 1, this.g + 1, this);
 	Point NE = new Point(x + 1, y - 1, this.g + 1, this);
 	Point SW = new Point(x - 1, y + 1, this.g + 1, this);
@@ -104,5 +120,4 @@ public class Point implements Comparable<Point> {
 	return list;
 
     }
-
 }
