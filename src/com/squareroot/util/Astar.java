@@ -3,6 +3,7 @@ package com.squareroot.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.squareroot.entities.Enemy;
 import com.squareroot.entities.Entity;
@@ -14,6 +15,7 @@ public class Astar {
     public static boolean key = true;
 
     public List<Point> findPathToInNormalMap(int origin_x, int origin_y, int destiny_x, int destiny_y) {
+	Random r = new Random();
 
 	origin_x = origin_x >> 4;
 	origin_y = origin_y >> 4;
@@ -50,7 +52,7 @@ public class Astar {
 	    for (Point neighbor : neighborhood) {
 		try {
 		    if (Entity.canMoveTo(neighbor.x << 4, neighbor.y << 4)) {
-			int successor_current_cost = current_node.g + 1;
+			int successor_current_cost = current_node.g +1;
 			if (isInOpenList[neighbor.y][neighbor.x] != null) {
 			    if (neighbor.g <= successor_current_cost) {
 				continue;
@@ -62,7 +64,7 @@ public class Astar {
 			    isInClosedList[neighbor.y][neighbor.x] = null;
 			    openList.insert(neighbor);
 			} else {
-			    neighbor.h = calcManhattanDistance(neighbor.x, neighbor.y, destiny.x, destiny.y);
+			    neighbor.h = calcManhattanDistance(neighbor.x, neighbor.y, destiny.x, destiny.y)+ r.nextInt(100);
 			    neighbor.d = neighbor.h + neighbor.g;
 			    isInOpenList[neighbor.y][neighbor.x] = neighbor;
 			    openList.insert(neighbor);
@@ -88,6 +90,7 @@ public class Astar {
 	ArrayList<Point> returned_list = new ArrayList<>();
 	for (int i = 0; i < list.size() - 1; i++) {
 	    Point previus = list.get(i);
+	  
 	    Point next = list.get(i + 1);
 	    returned_list.add(previus);
 

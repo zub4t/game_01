@@ -26,6 +26,11 @@ public class Bullet extends Ammo {
     @Override
     public void tick() {
 	life--;
+	if(!canMoveTo(this.x,this.y)) {
+	    Game.game_bullet_wall_music.play();
+	    Game.entities_to_remove_at_runtime.add(this);
+
+	}
 	if (life < 0) {
 	    Game.entities_to_remove_at_runtime.add(this);
 	}

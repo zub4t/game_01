@@ -58,6 +58,7 @@ public class Enemy extends Entity {
     public void tick() {
 
 	if (life < 1) {
+	    Game.game_explosion_music.play();
 	    Game.entities_to_remove_at_runtime.add(this);
 	}
 	if (!_list.isEmpty())

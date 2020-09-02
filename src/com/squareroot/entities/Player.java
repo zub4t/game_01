@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.squareroot.main.Game;
+import com.squareroot.main.Game.GAME_STATE;
 import com.squareroot.world.Camera;
 import com.squareroot.world.TileWall;
 import com.squareroot.world.World;
@@ -19,6 +20,7 @@ public class Player extends Entity {
     private boolean ctr_x_left = true;
     private boolean can_shooting = false;
     private boolean gun_equipped = false;
+    private boolean attacked;
 
     public static double life = 100;
 
@@ -30,14 +32,23 @@ public class Player extends Entity {
     }
 
     public synchronized void tick() {
+	if (life < 1) {
+	    
+
+	}
 	if (hasEnemyHere()) {
+	    attacked = true;
 	    Player.life -= 0.6;
+	    Game.game_attacked_music.play();
 	}
 	if (hasWeaponHere()) {
+	    Game.game_powerUP_music.play();
 	    frame_y = 3;
 	    gun_equipped = true;
+
 	}
 	if (isCan_shooting() && frame_y > 2 && Game.fps % 10 == 0) {
+	    Game.game_shooting_music.play();
 	    Game.entities_to_add_at_runtime.add(new Bullet(this.x, this.y, 5, 5, null, (frame_y == 3 ? true : false)));
 	}
 
@@ -105,41 +116,55 @@ public class Player extends Entity {
 
     @Override
     public void render(Graphics g) {
-	super.render(g);
-	if (frame_x < 6 && frame_y >= 0)
+	if (!attacked) {
 	    Game.player.sprite = Game.spritesheet.getSprite(this.frame_x * 16, frame_y * 16, 16, 16);
 
-	if (this.left) {
-	    if (gun_equipped)
-		this.frame_y = 4;
-	    else
-		this.frame_y = 1;
+	    if (this.left) {
+		if (gun_equipped)
+		    this.frame_y = 4;
+		else
+		    this.frame_y = 1;
 
-	    if (ctr_x_left) {
-		ctr_x_left = false;
-		ctr_x_right = true;
-		frame_x = 5;
+		if (ctr_x_left) {
+		    ctr_x_left = false;
+		    ctr_x_right = true;
+		    frame_x = 5;
+		}
+	    } else if (this.right) {
+		if (gun_equipped)
+		    this.frame_y = 3;
+		else
+		    this.frame_y = 0;
+		if (ctr_x_right) {
+		    ctr_x_right = false;
+		    ctr_x_left = true;
+		    frame_x = 2;
+		}
 	    }
-	} else if (this.right) {
-	    if (gun_equipped)
-		this.frame_y = 3;
-	    else
-		this.frame_y = 0;
-	    if (ctr_x_right) {
-		ctr_x_right = false;
-		ctr_x_left = true;
-		frame_x = 2;
+
+	    if (Game.fps % 10 == 0) {
+
+		frame_x += 1;
+		if (frame_x > 5)
+		    frame_x = 2;
+
 	    }
+	} else {
+	    frame_x = 6;
+	    (new Thread() {
+		@Override
+		public void run() {
+		    try {
+			Thread.sleep(100);
+			attacked = false;
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
+
+		}
+	    }).start();
 	}
-
-	if (Game.fps % 10 == 0) {
-
-	    frame_x += 1;
-	    if (frame_x > 5)
-		frame_x = 2;
-
-	}
-
+	super.render(g);
     }
 
     public boolean isRight() {
